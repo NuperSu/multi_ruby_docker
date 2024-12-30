@@ -21,9 +21,13 @@ RUN source /usr/local/rvm/scripts/rvm && \
 FROM ubuntu:24.04
 COPY --from=ruby-old /usr/local/rvm /usr/local/rvm
 
-# old SSL
+# SSL 1.0
 COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libssl.so.1.0.0 /usr/lib/x86_64-linux-gnu/
 COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0 /usr/lib/x86_64-linux-gnu/  
+
+# SSL 1.1
+COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libssl.so.1.1 /usr/lib/x86_64-linux-gnu/
+COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 /usr/lib/x86_64-linux-gnu/
 
 # deps for RVM
 RUN apt-get update && apt-get install -y --no-install-recommends \
