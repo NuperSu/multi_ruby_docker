@@ -2,7 +2,7 @@
 
 FROM ubuntu:18.04 AS ruby-old
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl gnupg2 build-essential libssl-dev libreadline-dev zlib1g-dev libyaml-dev \
+    curl gnupg2 build-essential libssl1.0.0 libreadline-dev zlib1g-dev libyaml-dev \
     git ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - && \
@@ -20,7 +20,10 @@ RUN source /usr/local/rvm/scripts/rvm && \
 # newer Rubies
 FROM ubuntu:24.04
 COPY --from=ruby-old /usr/local/rvm /usr/local/rvm
-    
+
+# old SSL
+COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libssl.so.1.0.0 /usr/lib/x86_64-linux-gnu/
+COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0 /usr/lib/x86_64-linux-gnu/  
 
 # deps for RVM
 RUN apt-get update && apt-get install -y --no-install-recommends \
