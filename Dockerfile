@@ -53,6 +53,8 @@ WORKDIR /app
 
 COPY Gemfile /app/
 COPY Gemfile.lock /app/
+COPY multiruby.gemspec /app/
+COPY lib/ /app/lib/
 
 ENV RUBY_VERSION=3.3.0
 
