@@ -47,9 +47,19 @@ RUN source /usr/local/rvm/scripts/rvm && \
     rvm install 3.1.6 && \
     rvm install 3.2.6 && \
     rvm install 3.3.6
-ENV CACHEBUST=1
+
 RUN source /usr/local/rvm/scripts/rvm && \
     for v in 2.3.8 2.4.10 2.5.9 2.6.10 2.7.8 3.0.7 3.1.6 3.2.6 3.3.6; do \
+      rvm "$v" do gem install bundler -v 2.3.27; \
+    done
+
+RUN source /usr/local/rvm/scripts/rvm && \
+    for v in 2.6.10 2.7.8; do \
+      rvm "$v" do gem install bundler -v 2.4.22; \
+    done
+
+RUN source /usr/local/rvm/scripts/rvm && \
+    for v in 3.0.7 3.1.6 3.2.6 3.3.6; do \
       rvm "$v" do gem install bundler; \
     done
 
