@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     multiruby (0.1.0)
+      bundler (~> 2.3)
 
 GEM
   remote: https://rubygems.org/

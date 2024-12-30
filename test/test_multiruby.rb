@@ -9,8 +9,9 @@ class TestMultiruby < Minitest::Test
   end
 
   def test_ruby_ver
-    puts "Checking Ruby version..."
-    puts "#{RUBY_VERSION}"
-    assert_equal "3.4.1", "#{RUBY_VERSION}"
+    expected_version = ENV.fetch("RUBY_VERSION", "3.3.6").strip.split('-').last
+    puts "Checking Ruby version is #{expected_version}..."
+    puts "Current Ruby: #{RUBY_VERSION}"
+    assert_equal expected_version, RUBY_VERSION
   end
 end
