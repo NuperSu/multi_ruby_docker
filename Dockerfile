@@ -2,7 +2,7 @@
 
 FROM ubuntu:18.04 AS ruby-old
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl gnupg2 build-essential libssl1.0.0 libreadline-dev zlib1g-dev libyaml-dev \
+    curl gnupg2 build-essential libssl1.0.0 libssl1.1 libreadline-dev zlib1g-dev libyaml-dev \
     git ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - && \
@@ -43,7 +43,7 @@ RUN source /usr/local/rvm/scripts/rvm && \
     rvm install 3.1.6 && \
     rvm install 3.2.6 && \
     rvm install 3.3.6
-
+ENV CACHEBUST=1
 RUN source /usr/local/rvm/scripts/rvm && \
     for v in 2.3.8 2.4.10 2.5.9 2.6.10 2.7.8 3.0.7 3.1.6 3.2.6 3.3.6; do \
       rvm "$v" do gem install bundler; \
