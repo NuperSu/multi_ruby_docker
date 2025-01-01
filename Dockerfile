@@ -49,7 +49,7 @@ RUN source /usr/local/rvm/scripts/rvm && \
     rvm install 3.3.6
 
 RUN source /usr/local/rvm/scripts/rvm && \
-    for v in 2.3.8 2.4.10 2.5.9 2.6.10 2.7.8 3.0.7 3.1.6 3.2.6 3.3.6; do \
+    for v in 2.3.8 2.4.10 2.5.9; do \
       rvm "$v" do gem install bundler -v 2.3.27; \
     done
 
@@ -70,11 +70,18 @@ COPY Gemfile.lock /app/
 COPY multiruby.gemspec /app/
 COPY lib/ /app/lib/
 
-ENV RUBY_VERSION=3.3.0
+SHELL ["/bin/bash", "-c"]
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# entrypoint by default
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["rake", "test"]
+ENTRYPOINT [ \
+  "/bin/bash", \
+  "-c", \
+  "set -e; \
+   source /usr/local/rvm/scripts/rvm; \
+   if [ -n 3.3.6 ]; then \
+     echo \"Using Ruby version: 3.3.6\"; \
+     rvm use 3.3.6 --default; \
+   else \
+     echo \"No Ruby version specified. Exiting.\"; \
+   fi; \
+   rake test;" \
+]
