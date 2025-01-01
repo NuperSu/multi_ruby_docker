@@ -65,10 +65,7 @@ RUN source /usr/local/rvm/scripts/rvm && \
 
 WORKDIR /app
 
-COPY Gemfile /app/
-COPY Gemfile.lock /app/
-COPY multiruby.gemspec /app/
-COPY lib/ /app/lib/
+COPY . /app/
 
 SHELL ["/bin/bash", "-c"]
 
@@ -77,11 +74,13 @@ ENTRYPOINT [ \
   "-c", \
   "set -e; \
    source /usr/local/rvm/scripts/rvm; \
-   if [ -n 3.3.6 ]; then \
-     echo \"Using Ruby version: 3.3.6\"; \
-     rvm use 3.3.6 --default; \
+   if [ -n \"$RUBY_V\" ]; then \
+     echo \"Using Ruby version: $RUBY_V\"; \
+     rvm use $RUBY_V --default; \
    else \
-     echo \"No Ruby version specified. Exiting.\"; \
+     echo \"No Ruby version specified. Please set RUBY_V environment variable. Exiting.\"; \
+     exit 1; \
    fi; \
+   bundler install; \   
    rake test;" \
 ]
