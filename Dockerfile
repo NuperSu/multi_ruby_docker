@@ -31,7 +31,7 @@ COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 /usr/lib/x86_64-
 
 # deps for RVM
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl gnupg2 build-essential libssl-dev libreadline-dev zlib1g-dev libyaml-dev \
+    curl gnupg2 build-essential openssl libssl-dev libreadline-dev zlib1g-dev libyaml-dev \
     git ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
@@ -58,14 +58,20 @@ RUN source /usr/local/rvm/scripts/rvm && \
       rvm "$v" do gem install bundler -v 2.4.22; \
     done
 
+#RUN source /usr/local/rvm/scripts/rvm && \
+#    rvm 3.0.7 do gem install bundler -v 2.5.23;
+
 RUN source /usr/local/rvm/scripts/rvm && \
-    for v in 3.0.7 3.1.6 3.2.6 3.3.6; do \
-      rvm "$v" do gem install bundler; \
+    for v in 3.1.6 3.2.6 3.3.6; do \
+      rvm "$v" do gem install bundler -v 2.6.2; \
     done
 
 WORKDIR /app
 
-COPY . /app/
+COPY Gemfile /app/
+COPY multiruby.gemspec /app/
+COPY lib/ /app/lib/
+COPY Rakefile /app/
 
 SHELL ["/bin/bash", "-c"]
 
