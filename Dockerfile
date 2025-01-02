@@ -53,7 +53,11 @@ RUN source /usr/local/rvm/scripts/rvm && \
     rvm install 3.3.6
 
 RUN source /usr/local/rvm/scripts/rvm && \
-    for v in 2.3.8 2.4.10 2.5.9; do \
+    gem update --system 3.2.3 && \
+    rvm 2.3.8 do gem install bundler -v 2.3.27;
+
+RUN source /usr/local/rvm/scripts/rvm && \
+    for v in 2.4.10 2.5.9; do \
       rvm "$v" do gem install bundler -v 2.3.27; \
     done
 
@@ -63,7 +67,7 @@ RUN source /usr/local/rvm/scripts/rvm && \
     done
 
 #RUN source /usr/local/rvm/scripts/rvm && \
-#    rvm 3.0.7 do gem install bundler -v 2.5.23;
+#    rvm 3.0.7 do gem install bundler -v 2.4.22;
 
 RUN source /usr/local/rvm/scripts/rvm && \
     for v in 3.1.6 3.2.6 3.3.6; do \
