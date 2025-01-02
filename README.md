@@ -1,4 +1,4 @@
-# MultiRuby Docker Image
+# multi_ruby Docker Image
 
 ![Ruby Versions](https://img.shields.io/badge/Ruby-2.3%20to%203.3-blue)
 
@@ -41,26 +41,18 @@ This project provides a Docker image based on `ubuntu:24.04` that includes multi
 2. **Build the Docker Image:**
 
    ```bash
-   docker build -t multiruby .
+   docker build -t multi_ruby .
    ```
 
    This command builds the Docker image based on the provided `Dockerfile`, installing all specified Ruby versions using RVM.
 
 ### Running the Docker Container
 
-You can run the container with a specific Ruby version by setting the `RUBY_VERSION` environment variable.
+You can run the container with a specific Ruby version by setting the `RUBY_V` environment variable.
 
 ```bash
-docker run --rm -e RUBY_VERSION=3.3.6 -v $(pwd):/app multiruby rake test
+docker run --rm -e RUBY_V=3.3.6 multi_ruby
 ```
-
-**Parameters:**
-
-- `--rm`: Automatically remove the container after it exits.
-- `-e RUBY_VERSION=3.3.6`: Sets the Ruby version to use inside the container.
-- `-v $(pwd):/app`: Mounts the current directory to `/app` inside the container.
-- `multiruby`: The name of the Docker image.
-- `rake test`: The command to run inside the container.
 
 ### Verifying Ruby Versions
 
@@ -69,34 +61,25 @@ To verify that all Ruby versions are correctly installed and can run the applica
 1. **List Installed Ruby Versions:**
 
    ```bash
-   docker run --rm multiruby rvm list
+   docker run --rm multi_ruby rvm list
    ```
 
 2. **Run Tests for Each Ruby Version:**
 
-   The provided GitHub Actions workflow automatically builds and tests the Docker image across all specified Ruby versions. However, you can manually run tests for each version as follows:
-
    ```bash
-   RUBY_VERSIONS=(2.3.8 2.4.10 2.5.9 2.6.10 2.7.8 3.0.7 3.1.6 3.2.6 3.3.6)
-
-   for version in "${RUBY_VERSIONS[@]}"; do
-     echo "Testing Ruby $version..."
-     docker run --rm -e RUBY_VERSION=$version -v $(pwd):/app multiruby rake test
-   done
+   ./verify.sh
    ```
 
 ### Example Project
 
-An example Ruby project is included to demonstrate the functionality. It contains a simple test suite using `minitest`.
+An example Ruby project with colored **Hello World** text.
 
-- **Gemfile:** Specifies gem dependencies (`rake` and `minitest`).
-- **Rakefile:** Defines the default task to run tests.
-- **Tests:** Located in the `test/` directory.
+- **Gemfile:** Specifies gem dependencie (`colorize`).
 
 To run the tests:
 
 ```bash
-docker run --rm -e RUBY_VERSION=3.3.6 -v $(pwd):/app multiruby rake test
+docker run --rm -e RUBY_V=3.3.6 multi_ruby
 ```
 
 ### Continuous Integration
@@ -106,24 +89,5 @@ The project uses GitHub Actions for CI/CD to ensure that the Docker image builds
 - **Workflow File:** `.github/workflows/main.yml`
 - **CI Pipeline:**
   1. **Checkout Code:** Uses `actions/checkout@v4`.
-  2. **Build Docker Image:** Builds the `multiruby` Docker image.
-  3. **Test Each Ruby Version:** Runs `rake test` for each Ruby version in the matrix.
-
-### Scripts and Utilities
-
-- **`combine.py`:** A Python script to combine multiple files into one, preserving their relative paths and contents.
-- **`entrypoint.sh`:** Entry point script for the Docker container that sets up the Ruby environment and runs the specified command.
-
-## Usage Examples
-
-### Running Tests with a Specific Ruby Version
-
-```bash
-docker run --rm -e RUBY_VERSION=2.7.8 -v $(pwd):/app multiruby rake test
-```
-
-### Starting an Interactive Console
-
-```bash
-docker run --rm -e RUBY_VERSION=3.2.6 -v $(pwd):/app -it multiruby bin/console
-```
+  2. **Build Docker Image:** Builds the `multi_ruby` Docker image.
+  3. **Test Each Ruby Version:** Runs `app.rb` for each Ruby version in the matrix.

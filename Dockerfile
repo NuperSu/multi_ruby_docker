@@ -14,7 +14,8 @@ RUN source /usr/local/rvm/scripts/rvm && \
     rvm install 2.4.10 && \
     rvm install 2.5.9 && \
     rvm install 2.6.10 && \
-    rvm install 2.7.8
+    rvm install 2.7.8 && \
+    rvm install 3.0.7
 
 FROM ubuntu:20.04 AS ruby-ssl1.1.1
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -47,7 +48,6 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - && \
 SHELL ["/bin/bash", "-c"]
 
 RUN source /usr/local/rvm/scripts/rvm && \
-    rvm install 3.0.7 && \
     rvm install 3.1.6 && \
     rvm install 3.2.6 && \
     rvm install 3.3.6
@@ -66,8 +66,8 @@ RUN source /usr/local/rvm/scripts/rvm && \
       rvm "$v" do gem install bundler -v 2.4.22; \
     done
 
-#RUN source /usr/local/rvm/scripts/rvm && \
-#    rvm 3.0.7 do gem install bundler -v 2.4.22;
+RUN source /usr/local/rvm/scripts/rvm && \
+    rvm 3.0.7 do gem install bundler -v 2.4.22;
 
 RUN source /usr/local/rvm/scripts/rvm && \
     for v in 3.1.6 3.2.6 3.3.6; do \
