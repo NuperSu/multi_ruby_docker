@@ -16,6 +16,10 @@ RUN source /usr/local/rvm/scripts/rvm && \
     rvm install 2.6.10 && \
     rvm install 2.7.8
 
+FROM ubuntu:20.04 AS ruby-ssl1.1.1
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libssl1.1 && \
+    rm -rf /var/lib/apt/lists/*
 
 # newer Rubies
 FROM ubuntu:24.04
@@ -26,8 +30,8 @@ COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libssl.so.1.0.0 /usr/lib/x86_64-l
 COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0 /usr/lib/x86_64-linux-gnu/  
 
 # SSL 1.1
-COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libssl.so.1.1 /usr/lib/x86_64-linux-gnu/
-COPY --from=ruby-old /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 /usr/lib/x86_64-linux-gnu/
+COPY --from=ruby-ssl1.1.1 /usr/lib/x86_64-linux-gnu/libssl.so.1.1 /usr/lib/x86_64-linux-gnu/
+COPY --from=ruby-ssl1.1.1 /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 /usr/lib/x86_64-linux-gnu/
 
 # deps for RVM
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -70,8 +74,8 @@ WORKDIR /app
 
 COPY Gemfile /app/
 COPY multiruby.gemspec /app/
-COPY lib/ /app/lib/
-COPY Rakefile /app/
+COPY lib /app/lib
+COPY app.rb /app/
 
 SHELL ["/bin/bash", "-c"]
 
@@ -88,5 +92,5 @@ ENTRYPOINT [ \
      exit 1; \
    fi; \
    bundler install; \   
-   rake test;" \
+   ruby app.rb;" \
 ]
