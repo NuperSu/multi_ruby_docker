@@ -27,4 +27,4 @@ jobs:
         run: docker build -t multiruby .
 
       - name: Test each Ruby version
-        run: docker run --rm -e RUBY_VERSION=${{ matrix.ruby-version }} multiruby rake test
+        run: docker run --rm -e RUBY_V=${{ matrix.ruby-version }} multiruby rake test
