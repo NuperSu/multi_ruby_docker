@@ -72,7 +72,7 @@ To verify that all Ruby versions are correctly installed and can run the applica
 
 ### Example Project
 
-An example Ruby project with colored **Hello World** text.
+An example Ruby project printing **Hello World**.
 
 - **Gemfile:** Specifies gem dependencie (`colorize`).
 
